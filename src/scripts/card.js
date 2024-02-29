@@ -1,9 +1,4 @@
-import {modalOpen} from './modal.js';
 const cardTemplate = document.querySelector('#card-template').content.querySelector('.card');
-
-const imageFullScreenModal = document.querySelector('.popup_type_image');
-const imageFullScreenModalPicture = document.querySelector('.popup__image');
-const imageFullScreenModalName = document.querySelector('.popup__caption');
 
 const createCard = (data, removeFunction, showFullScreenFunction, likeBtnFunction) => {
     const card = cardTemplate.cloneNode(true);
@@ -27,18 +22,6 @@ const createCard = (data, removeFunction, showFullScreenFunction, likeBtnFunctio
     return card;
 }
 
-const onImageClickHandler = function (evt) {
-    modalOpen(imageFullScreenModal);
-    imageFullScreenModalPicture.src = evt.target.src;
-    imageFullScreenModalPicture.alt = evt.target.closest('.card').textContent;
-    imageFullScreenModalName.textContent = evt.target.closest('.card').textContent;
-
-}
-
-const renderTemplate = (template, container, flag = true) => {
-    flag ? container.prepend(template) : container.append(template);
-}
-
 const removeBtnClickHandler = (evt) => {
     evt.target.closest('.card').remove();
 }
@@ -47,4 +30,4 @@ const likeBtnClickHandler = function (evt) {
     evt.target.classList.toggle('card__like-button_is-active');
 }
 
-export {createCard, onImageClickHandler, renderTemplate, removeBtnClickHandler, likeBtnClickHandler}
+export {createCard, removeBtnClickHandler, likeBtnClickHandler}

@@ -1,7 +1,7 @@
 import '../pages/index.css';
 import {initialCards} from './cards.js'
-import {modalOpen, modalClose} from './modal.js'
-import {createCard, onImageClickHandler, renderTemplate, removeBtnClickHandler, likeBtnClickHandler} from './card.js'
+import {openModal, closeModal} from './modal.js'
+import {createCard, removeBtnClickHandler, likeBtnClickHandler} from './card.js'
 const cardsList = document.querySelector('.places__list');
 const profileEditModal = document.querySelector('.popup_type_edit');
 const profileEditBtn = document.querySelector('.profile__edit-button');
@@ -15,18 +15,19 @@ const editProfileFormName = document.querySelector('.popup__input_type_name');
 const editProfileFormJob = document.querySelector('.popup__input_type_description');
 const profileName = document.querySelector('.profile__title');
 const profileJob = document.querySelector('.profile__description');
-
+const imageFullScreenModal = document.querySelector('.popup_type_image');
+const imageFullScreenModalPicture = document.querySelector('.popup__image');
+const imageFullScreenModalName = document.querySelector('.popup__caption');
 
 profileEditBtn.addEventListener('click', function () {
     editProfileFormName.value = profileName.textContent;
     editProfileFormJob.value = profileJob.textContent;
-    modalOpen(profileEditModal);
-    editProfileForm.addEventListener('submit', editProfileFormSubmitHandler);
+    openModal(profileEditModal);
+
 });
 
 placeAddBtn.addEventListener('click', function () {
-    modalOpen(placeAddModal);
-    addCardForm.addEventListener('submit', addCardFormSubmitHandler);
+    openModal(placeAddModal);
 });
 
 const addCardFormSubmitHandler = function (evt) {
@@ -34,9 +35,8 @@ const addCardFormSubmitHandler = function (evt) {
     const name = addCardFormName.value;
     const link = addCardFormUrl.value;
     renderTemplate(createCard({name, link}, removeBtnClickHandler, onImageClickHandler, likeBtnClickHandler), cardsList, true);
-    modalClose();
+    closeModal();
     addCardForm.reset();
-    addCardForm.removeEventListener('submit', addCardFormSubmitHandler);
 }
 
 const editProfileFormSubmitHandler = function (evt) {
@@ -49,10 +49,23 @@ const editProfileFormSubmitHandler = function (evt) {
         profileJob.textContent = editProfileFormJob.value;
     }
 
-    modalClose();
-    editProfileForm.removeEventListener('submit', editProfileFormSubmitHandler);
+    closeModal();
 }
 
+const onImageClickHandler = function (evt) {
+    openModal(imageFullScreenModal);
+    imageFullScreenModalPicture.src = evt.target.src;
+    imageFullScreenModalPicture.alt = evt.target.closest('.card').textContent;
+    imageFullScreenModalName.textContent = evt.target.closest('.card').textContent;
+
+}
+
+const renderTemplate = (template, container, flag = true) => {
+    flag ? container.prepend(template) : container.append(template);
+}
+
+editProfileForm.addEventListener('submit', editProfileFormSubmitHandler);
+addCardForm.addEventListener('submit', addCardFormSubmitHandler);
 
 initialCards.forEach((element) => renderTemplate(createCard(element, removeBtnClickHandler, onImageClickHandler, likeBtnClickHandler), cardsList, false));
 
